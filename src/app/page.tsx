@@ -71,9 +71,6 @@ export default function HomePage() {
             <Link href="#products" className="btn btn-primary">
               Shop Now
             </Link>
-            <Link href="/about" className="btn btn-secondary">
-              Our Story
-            </Link>
           </div>
 
           {/* Decorative line */}
