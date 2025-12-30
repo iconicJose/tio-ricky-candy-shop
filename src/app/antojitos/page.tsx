@@ -8,24 +8,24 @@ const productTypes = [
   { 
     id: 'churro-puffs', 
     name: 'Churro Puffs', 
-    price: 8,
+    price: 0.01,
     description: 'Crispy, cinnamon-sugar coated puffs with that classic churro flavor. Perfect for snacking!',
     emoji: '🥐',
   },
   { 
     id: 'carne-seca', 
     name: 'Carne Seca', 
-    price: 12,
+    price: 0.01,
     description: 'Traditional Mexican dried beef jerky. Savory, spiced, and perfect for any occasion.',
     emoji: '🥩',
   },
 ];
 
-// Bag sizes
-const bagSizes = [
-  { name: 'Small', size: '4oz', priceMultiplier: 1 },
-  { name: 'Medium', size: '8oz', priceMultiplier: 1.75 },
-  { name: 'Large', size: '16oz', priceMultiplier: 3 },
+// Count sizes (placeholder until prices confirmed)
+const countSizes = [
+  { name: '10 ct', size: '0.001g', priceMultiplier: 1 },
+  { name: '25 ct', size: '0.001g', priceMultiplier: 1 },
+  { name: '50 ct', size: '0.001g', priceMultiplier: 1 },
 ];
 
 export default function AntojitosPage() {
@@ -36,19 +36,19 @@ export default function AntojitosPage() {
   const [addedToCart, setAddedToCart] = useState(false);
 
   const currentProduct = productTypes.find(p => p.id === selectedProduct);
-  const currentSize = bagSizes.find(s => s.name === selectedSize);
+  const currentSize = countSizes.find(s => s.name === selectedSize);
   const canAddToCart = selectedProduct && selectedSize;
   
   const finalPrice = currentProduct && currentSize 
-    ? Math.round(currentProduct.price * currentSize.priceMultiplier) 
+    ? currentProduct.price * currentSize.priceMultiplier 
     : 0;
 
   const handleAddToCart = () => {
     if (!canAddToCart || !currentProduct || !currentSize) return;
 
     addItem({
-      id: `antojitos-${currentProduct.id}-${currentSize.name.toLowerCase()}-${Date.now()}`,
-      name: `${currentProduct.name} (${currentSize.size})`,
+      id: `antojitos-${currentProduct.id}-${currentSize.name.toLowerCase().replace(' ', '-')}-${Date.now()}`,
+      name: `${currentProduct.name} (${currentSize.name})`,
       price: finalPrice,
       size: currentSize.size,
     });
@@ -62,12 +62,13 @@ export default function AntojitosPage() {
   };
 
   return (
-    <main style={{ minHeight: '100vh', backgroundColor: 'var(--white)' }}>
+    <main style={{ minHeight: '100vh', backgroundColor: 'var(--white)', display: 'flex', flexDirection: 'column' }}>
       {/* Decorative Top Border */}
       <div style={{
         background: 'linear-gradient(180deg, var(--warm-orange) 0%, var(--warm-orange) 60%, transparent 100%)',
         height: '120px',
         position: 'relative',
+        flexShrink: 0,
       }}>
         <svg 
           viewBox="0 0 500 50" 
@@ -88,7 +89,7 @@ export default function AntojitosPage() {
       </div>
 
       {/* Page Content */}
-      <div className="container" style={{ padding: '3rem 1rem', maxWidth: '800px', margin: '0 auto' }}>
+      <div className="container" style={{ padding: '3rem 1rem', maxWidth: '800px', margin: '0 auto', flex: 1 }}>
         {/* Page Header */}
         <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
           <h1 style={{
@@ -186,19 +187,20 @@ export default function AntojitosPage() {
                 <p style={{
                   fontFamily: 'var(--font-body)',
                   fontSize: '0.875rem',
-                  fontWeight: 600,
-                  color: 'var(--warm-orange)',
+                  fontWeight: 500,
+                  color: 'var(--text-muted)',
                   marginTop: '0.75rem',
                   marginBottom: 0,
+                  fontStyle: 'italic',
                 }}>
-                  Starting at ${product.price}
+                  Price TBD
                 </p>
               </button>
             ))}
           </div>
         </div>
 
-        {/* Step 2: Choose Size */}
+        {/* Step 2: Choose Count */}
         {selectedProduct && (
           <div style={{ marginBottom: '2.5rem' }}>
             <h2 style={{
@@ -223,7 +225,7 @@ export default function AntojitosPage() {
                 fontSize: '0.875rem',
                 fontWeight: 700,
               }}>2</span>
-              Choose Your Size
+              Choose Your Count
             </h2>
 
             <div style={{
@@ -231,10 +233,7 @@ export default function AntojitosPage() {
               gridTemplateColumns: 'repeat(3, 1fr)',
               gap: '1rem',
             }}>
-              {bagSizes.map((size) => {
-                const price = currentProduct 
-                  ? Math.round(currentProduct.price * size.priceMultiplier) 
-                  : 0;
+              {countSizes.map((size) => {
                 return (
                   <button
                     key={size.name}
@@ -255,8 +254,8 @@ export default function AntojitosPage() {
                   >
                     <p style={{
                       fontFamily: 'var(--font-body)',
-                      fontSize: '1rem',
-                      fontWeight: 600,
+                      fontSize: '1.25rem',
+                      fontWeight: 700,
                       color: 'var(--text-primary)',
                       marginBottom: '0.25rem',
                     }}>
@@ -264,20 +263,22 @@ export default function AntojitosPage() {
                     </p>
                     <p style={{
                       fontFamily: 'var(--font-body)',
-                      fontSize: '0.8125rem',
-                      color: 'var(--text-secondary)',
+                      fontSize: '0.75rem',
+                      color: 'var(--text-muted)',
                       marginBottom: '0.5rem',
+                      fontStyle: 'italic',
                     }}>
                       {size.size}
                     </p>
                     <p style={{
                       fontFamily: 'var(--font-body)',
-                      fontSize: '1.125rem',
-                      fontWeight: 700,
-                      color: 'var(--warm-orange)',
+                      fontSize: '0.875rem',
+                      fontWeight: 500,
+                      color: 'var(--text-muted)',
                       margin: 0,
+                      fontStyle: 'italic',
                     }}>
-                      ${price}
+                      $TBD
                     </p>
                   </button>
                 );
@@ -310,16 +311,17 @@ export default function AntojitosPage() {
                   color: 'var(--text-secondary)',
                   marginBottom: '0.25rem',
                 }}>
-                  {currentProduct?.name} ({currentSize?.size})
+                  {currentProduct?.name} ({currentSize?.name})
                 </p>
                 <p style={{
                   fontFamily: 'var(--font-body)',
-                  fontSize: '1.5rem',
-                  fontWeight: 700,
-                  color: 'var(--text-primary)',
+                  fontSize: '1rem',
+                  fontWeight: 500,
+                  color: 'var(--text-muted)',
                   margin: 0,
+                  fontStyle: 'italic',
                 }}>
-                  ${finalPrice}
+                  $0.01 <span style={{ fontSize: '0.75rem' }}>(placeholder - price TBD)</span>
                 </p>
               </div>
             </div>
@@ -358,8 +360,8 @@ export default function AntojitosPage() {
         )}
       </div>
 
-      {/* Bottom Decorative Border */}
-      <div style={{ marginTop: '2rem' }}>
+      {/* Bottom Decorative Border - Fixed to bottom */}
+      <div style={{ flexShrink: 0, marginTop: 'auto', marginBottom: '-4rem' }}>
         <svg 
           viewBox="0 0 500 50" 
           preserveAspectRatio="none" 

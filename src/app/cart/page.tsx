@@ -795,8 +795,8 @@ export default function CartPage() {
                   fontSize: '0.9375rem',
                 }}>
                   <span style={{ color: 'var(--text-secondary)' }}>Shipping</span>
-                  <span style={{ color: 'var(--text-muted)', fontStyle: 'italic' }}>
-                    $_
+                  <span style={{ color: 'var(--text-muted)', fontStyle: 'italic', fontSize: '0.8125rem' }}>
+                    Calculated at checkout
                   </span>
                 </div>
                 <div style={{
@@ -806,8 +806,8 @@ export default function CartPage() {
                   fontSize: '0.9375rem',
                 }}>
                   <span style={{ color: 'var(--text-secondary)' }}>Tax</span>
-                  <span style={{ color: 'var(--text-muted)', fontStyle: 'italic' }}>
-                    $_
+                  <span style={{ color: 'var(--text-muted)', fontStyle: 'italic', fontSize: '0.8125rem' }}>
+                    Calculated at checkout
                   </span>
                 </div>
               </div>
@@ -835,7 +835,7 @@ export default function CartPage() {
                     fontWeight: 700,
                     color: 'var(--chamoy-red)',
                   }}>
-                    $_
+                    ${(subtotalCents / 100).toFixed(2)}
                   </span>
                 </div>
                 <p style={{
