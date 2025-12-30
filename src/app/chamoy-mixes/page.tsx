@@ -164,13 +164,7 @@ export default function CandyMixPage() {
   };
 
   const getFruitTrayTotal = () => {
-    const minimumPrice = 50;
-    const fruitsTotal = selectedFruits.reduce((sum, fruit) => {
-      const fruitItem = fruitOptions.find(f => f.name === fruit);
-      return sum + (fruitItem?.price || 0);
-    }, 0);
-    // $50 is the minimum, actual price is the higher of minimum or fruit selections
-    return Math.max(minimumPrice, fruitsTotal);
+    return 50; // Flat fee
   };
 
   const handleAddFruitTrayToCart = () => {
@@ -1048,7 +1042,7 @@ export default function CandyMixPage() {
               color: 'var(--text-secondary)',
               marginBottom: '1.5rem',
             }}>
-              Select the fruits you'd like. Minimum tray price is $50 — price adjusts if your selection exceeds that.
+              Select the fruits you'd like included in your tray. Flat fee of $50.
             </p>
 
             {/* Fruit Selection */}
@@ -1061,7 +1055,6 @@ export default function CandyMixPage() {
                     onClick={() => toggleFruitSelection(fruit.name)}
                     style={{
                       display: 'flex',
-                      justifyContent: 'space-between',
                       alignItems: 'center',
                       width: '100%',
                       padding: '1rem',
@@ -1099,12 +1092,6 @@ export default function CandyMixPage() {
                         {fruit.name}
                       </span>
                     </span>
-                    <span style={{
-                      fontWeight: 700,
-                      color: 'var(--chamoy-red)',
-                    }}>
-                      ${fruit.price}
-                    </span>
                   </button>
                 );
               })}
@@ -1119,44 +1106,13 @@ export default function CandyMixPage() {
             }}>
               {selectedFruits.length > 0 ? (
                 <>
-                  {selectedFruits.map(fruit => {
-                    const fruitItem = fruitOptions.find(f => f.name === fruit);
-                    return (
-                      <div key={fruit} style={{
-                        display: 'flex',
-                        justifyContent: 'space-between',
-                        marginBottom: '0.25rem',
-                        fontSize: '0.9375rem',
-                        color: 'var(--text-secondary)',
-                      }}>
-                        <span>{fruit}</span>
-                        <span>${fruitItem?.price}.00</span>
-                      </div>
-                    );
-                  })}
-                  {(() => {
-                    const fruitsTotal = selectedFruits.reduce((sum, fruit) => {
-                      const fruitItem = fruitOptions.find(f => f.name === fruit);
-                      return sum + (fruitItem?.price || 0);
-                    }, 0);
-                    const total = getFruitTrayTotal();
-                    if (fruitsTotal < 50) {
-                      return (
-                        <div style={{
-                          display: 'flex',
-                          justifyContent: 'space-between',
-                          marginBottom: '0.25rem',
-                          fontSize: '0.875rem',
-                          color: 'var(--warm-orange)',
-                          fontStyle: 'italic',
-                        }}>
-                          <span>Minimum price applied</span>
-                          <span>($50 min)</span>
-                        </div>
-                      );
-                    }
-                    return null;
-                  })()}
+                  <p style={{
+                    fontSize: '0.9375rem',
+                    color: 'var(--text-secondary)',
+                    marginBottom: '0.5rem',
+                  }}>
+                    Selected: {selectedFruits.join(', ')}
+                  </p>
                 </>
               ) : (
                 <p style={{
@@ -1165,7 +1121,7 @@ export default function CandyMixPage() {
                   textAlign: 'center',
                   margin: 0,
                 }}>
-                  Select fruits to see pricing
+                  Select fruits for your tray
                 </p>
               )}
               <div style={{
@@ -1183,7 +1139,7 @@ export default function CandyMixPage() {
                   fontWeight: 700,
                   color: 'var(--chamoy-red)',
                 }}>
-                  ${selectedFruits.length > 0 ? getFruitTrayTotal() : 50}+
+                  $50
                 </span>
               </div>
             </div>
@@ -1205,7 +1161,7 @@ export default function CandyMixPage() {
               }}
             >
               {selectedFruits.length > 0 
-                ? `Add to Cart - $${getFruitTrayTotal()}`
+                ? 'Add to Cart - $50'
                 : 'Select at least one fruit'}
             </button>
           </div>
