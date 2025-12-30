@@ -1,0 +1,9 @@
+{
+  "extends": ["next/core-web-vitals"],
+  "rules": {
+    // Enforce explicit return types on functions
+    "@typescript-eslint/explicit-function-return-type": "off",
+    // Warn on console.log (should use proper logging in production)
+    "no-console": ["warn", { "allow": ["warn", "error"] }]
+  }
+}

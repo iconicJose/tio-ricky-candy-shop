@@ -1,0 +1,106 @@
+'use client';
+
+import { createContext, useContext, useEffect, useState, useCallback, ReactNode } from 'react';
+import { cartStore, CartState, CartLineItem } from '@/lib/cartStore';
+
+interface CartContextValue {
+  cart: CartState;
+  totalQuantity: number;
+  subtotalCents: number;
+  addItem: (
+    productId: string,
+    productName: string,
+    flavor: string,
+    size: string,
+    priceCents: number
+  ) => void;
+  updateQuantity: (lineItemId: string, newQuantity: number) => void;
+  removeItem: (lineItemId: string) => void;
+  clearCart: () => void;
+  triggerCartAnimation: () => void;
+  isAnimating: boolean;
+}
+
+const CartContext = createContext<CartContextValue | null>(null);
+
+export function CartProvider({ children }: { children: ReactNode }) {
+  const [cart, setCart] = useState<CartState>({ items: [] });
+  const [isAnimating, setIsAnimating] = useState(false);
+
+  useEffect(() => {
+    // Initialize and sync with store
+    cartStore.init();
+    setCart(cartStore.getCart());
+
+    const unsubscribe = cartStore.subscribe((newCart) => {
+      setCart({ ...newCart, items: [...newCart.items] });
+    });
+
+    return unsubscribe;
+  }, []);
+
+  const triggerCartAnimation = useCallback(() => {
+    setIsAnimating(true);
+    setTimeout(() => setIsAnimating(false), 300);
+  }, []);
+
+  const addItem = useCallback(
+    (
+      productId: string,
+      productName: string,
+      flavor: string,
+      size: string,
+      priceCents: number
+    ) => {
+      cartStore.addItem(productId, productName, flavor, size, priceCents);
+      triggerCartAnimation();
+    },
+    [triggerCartAnimation]
+  );
+
+  const updateQuantity = useCallback((lineItemId: string, newQuantity: number) => {
+    cartStore.updateQuantity(lineItemId, newQuantity);
+  }, []);
+
+  const removeItem = useCallback((lineItemId: string) => {
+    cartStore.removeItem(lineItemId);
+  }, []);
+
+  const clearCart = useCallback(() => {
+    cartStore.clearCart();
+  }, []);
+
+  const totalQuantity = cart.items.reduce((sum, item) => sum + item.quantity, 0);
+  const subtotalCents = cart.items.reduce(
+    (sum, item) => sum + item.priceCents * item.quantity,
+    0
+  );
+
+  return (
+    <CartContext.Provider
+      value={{
+        cart,
+        totalQuantity,
+        subtotalCents,
+        addItem,
+        updateQuantity,
+        removeItem,
+        clearCart,
+        triggerCartAnimation,
+        isAnimating,
+      }}
+    >
+      {children}
+    </CartContext.Provider>
+  );
+}
+
+export function useCart(): CartContextValue {
+  const context = useContext(CartContext);
+  if (!context) {
+    throw new Error('useCart must be used within a CartProvider');
+  }
+  return context;
+}
+
+export type { CartLineItem };

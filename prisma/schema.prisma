@@ -1,0 +1,354 @@
+// Pik-A-Mela Candy Shop - Database Schema
+// ======================================
+// This schema defines the data model for the e-commerce platform.
+// All pricing and sensitive data is stored server-side only.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  // URL configured in prisma.config.ts for Prisma 7+
+}
+
+// =============================================================================
+// AUTHENTICATION & AUTHORIZATION
+// Workers and admins only - customers do not have accounts in v1
+// =============================================================================
+
+enum Role {
+  ADMIN   // Full access - manage products, orders, workers
+  WORKER  // Limited access - view/update orders, view products
+}
+
+model User {
+  id           String    @id @default(cuid())
+  email        String    @unique
+  passwordHash String    @map("password_hash")
+  name         String
+  role         Role      @default(WORKER)
+  active       Boolean   @default(true)
+  createdAt    DateTime  @default(now()) @map("created_at")
+  updatedAt    DateTime  @updatedAt @map("updated_at")
+
+  // Relations
+  sessions      Session[]
+  createdOrders Order[]   @relation("CreatedByUser")
+  updatedOrders Order[]   @relation("UpdatedByUser")
+  auditLogs     AuditLog[]
+
+  @@index([email])
+  @@map("users")
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  userId       String   @map("user_id")
+  token        String   @unique
+  expiresAt    DateTime @map("expires_at")
+  createdAt    DateTime @default(now()) @map("created_at")
+  
+  // Session metadata
+  ipAddress    String?  @map("ip_address")
+  userAgent    String?  @map("user_agent")
+
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([token])
+  @@index([userId])
+  @@index([expiresAt])
+  @@map("sessions")
+}
+
+// =============================================================================
+// PRODUCT CATALOG
+// Server-trusted pricing - prices are NEVER sent from the client
+// =============================================================================
+
+model Product {
+  id          String   @id @default(cuid())
+  name        String
+  slug        String   @unique
+  description String?
+  
+  // Pricing in cents (integer) to avoid floating point issues
+  // e.g., $12.99 = 1299
+  priceCents  Int      @map("price_cents")
+  
+  // Inventory
+  stockQuantity     Int     @default(0) @map("stock_quantity")
+  lowStockThreshold Int     @default(10) @map("low_stock_threshold")
+  
+  // Product details
+  ingredients  String?  // Comma-separated or text list
+  allergens    String?  // e.g., "Contains: Milk, Soy"
+  weightOz     Float?   @map("weight_oz") // in ounces, for shipping
+  
+  // Status
+  active       Boolean  @default(true)
+  featured     Boolean  @default(false)
+  
+  // Metadata
+  imageUrl     String?  @map("image_url")
+  
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+
+  // Relations
+  orderItems   OrderItem[]
+  categories   ProductCategory[]
+
+  @@index([slug])
+  @@index([active, featured])
+  @@map("products")
+}
+
+model Category {
+  id          String   @id @default(cuid())
+  name        String   @unique
+  slug        String   @unique
+  description String?
+  sortOrder   Int      @default(0) @map("sort_order")
+  
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  // Relations
+  products    ProductCategory[]
+
+  @@map("categories")
+}
+
+model ProductCategory {
+  productId  String @map("product_id")
+  categoryId String @map("category_id")
+
+  product    Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  category   Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+
+  @@id([productId, categoryId])
+  @@map("product_categories")
+}
+
+// =============================================================================
+// ORDERS
+// All order totals are calculated server-side from product prices
+// =============================================================================
+
+enum OrderStatus {
+  PENDING          // Order created, awaiting payment
+  PAYMENT_FAILED   // Stripe payment failed
+  PAID             // Payment confirmed via webhook
+  PROCESSING       // Being prepared
+  SHIPPED          // In transit
+  DELIVERED        // Confirmed delivered
+  CANCELLED        // Order cancelled
+  REFUNDED         // Full refund issued
+}
+
+model Order {
+  id               String      @id @default(cuid())
+  orderNumber      String      @unique @map("order_number")
+  
+  // Order totals (all in cents, calculated server-side)
+  subtotalCents    Int         @map("subtotal_cents")
+  taxCents         Int         @default(0) @map("tax_cents")
+  shippingCents    Int         @default(0) @map("shipping_cents")
+  totalCents       Int         @map("total_cents")
+  
+  // Status
+  status           OrderStatus @default(PENDING)
+  
+  // Customer info (no account required)
+  customerEmail    String      @map("customer_email")
+  customerName     String      @map("customer_name")
+  customerPhone    String?     @map("customer_phone")
+  
+  // Shipping address
+  shippingAddress  Json        @map("shipping_address")
+  
+  // Notes
+  customerNotes    String?     @map("customer_notes")
+  internalNotes    String?     @map("internal_notes")
+  
+  // Timestamps
+  createdAt        DateTime    @default(now()) @map("created_at")
+  updatedAt        DateTime    @updatedAt @map("updated_at")
+  paidAt           DateTime?   @map("paid_at")
+  shippedAt        DateTime?   @map("shipped_at")
+  deliveredAt      DateTime?   @map("delivered_at")
+  
+  // Audit trail
+  createdById      String?     @map("created_by_id")
+  createdBy        User?       @relation("CreatedByUser", fields: [createdById], references: [id])
+  updatedById      String?     @map("updated_by_id")
+  updatedBy        User?       @relation("UpdatedByUser", fields: [updatedById], references: [id])
+  
+  // Relations
+  items            OrderItem[]
+  payments         Payment[]
+
+  @@index([orderNumber])
+  @@index([customerEmail])
+  @@index([status])
+  @@index([createdAt])
+  @@map("orders")
+}
+
+model OrderItem {
+  id             String  @id @default(cuid())
+  orderId        String  @map("order_id")
+  productId      String  @map("product_id")
+  
+  // Snapshot of product at time of order (prices can change)
+  productName    String  @map("product_name")
+  priceCents     Int     @map("price_cents")
+  quantity       Int
+  
+  // Calculated total for this line item
+  totalCents     Int     @map("total_cents")
+  
+  // Relations
+  order          Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  product        Product @relation(fields: [productId], references: [id])
+
+  @@index([orderId])
+  @@map("order_items")
+}
+
+// =============================================================================
+// PAYMENTS
+// Stripe payment tracking - separate from orders for proper audit trail
+// =============================================================================
+
+enum PaymentStatus {
+  PENDING          // Payment initiated
+  PROCESSING       // Being processed by Stripe
+  SUCCEEDED        // Payment successful
+  FAILED           // Payment failed
+  CANCELLED        // Payment cancelled
+  REFUNDED         // Full refund
+  PARTIALLY_REFUNDED // Partial refund
+}
+
+model Payment {
+  id                String        @id @default(cuid())
+  orderId           String        @map("order_id")
+  
+  // Stripe references
+  stripeSessionId   String?       @unique @map("stripe_session_id")
+  stripePaymentIntentId String?   @unique @map("stripe_payment_intent_id")
+  stripeChargeId    String?       @map("stripe_charge_id")
+  
+  // Payment details
+  amountCents       Int           @map("amount_cents")
+  currency          String        @default("usd")
+  status            PaymentStatus @default(PENDING)
+  
+  // Refund tracking
+  refundedCents     Int           @default(0) @map("refunded_cents")
+  
+  // Metadata
+  failureReason     String?       @map("failure_reason")
+  metadata          Json?
+  
+  // Timestamps
+  createdAt         DateTime      @default(now()) @map("created_at")
+  updatedAt         DateTime      @updatedAt @map("updated_at")
+  succeededAt       DateTime?     @map("succeeded_at")
+  
+  // Relations
+  order             Order         @relation(fields: [orderId], references: [id], onDelete: Cascade)
+
+  @@index([orderId])
+  @@index([stripeSessionId])
+  @@index([stripePaymentIntentId])
+  @@map("payments")
+}
+
+// =============================================================================
+// AUDIT LOG
+// Track all significant actions for security and debugging
+// =============================================================================
+
+enum AuditAction {
+  // Auth actions
+  USER_LOGIN
+  USER_LOGOUT
+  USER_CREATED
+  USER_UPDATED
+  USER_DEACTIVATED
+  
+  // Product actions
+  PRODUCT_CREATED
+  PRODUCT_UPDATED
+  PRODUCT_DELETED
+  
+  // Order actions
+  ORDER_CREATED
+  ORDER_STATUS_CHANGED
+  ORDER_UPDATED
+  ORDER_CANCELLED
+  
+  // Payment actions
+  PAYMENT_INITIATED
+  PAYMENT_SUCCEEDED
+  PAYMENT_FAILED
+  PAYMENT_REFUNDED
+  
+  // Admin actions
+  SETTINGS_CHANGED
+}
+
+model AuditLog {
+  id          String      @id @default(cuid())
+  action      AuditAction
+  
+  // Who performed the action (null for system/webhook actions)
+  userId      String?     @map("user_id")
+  user        User?       @relation(fields: [userId], references: [id])
+  
+  // What was affected
+  entityType  String      @map("entity_type") // e.g., "Order", "Product", "User"
+  entityId    String      @map("entity_id")
+  
+  // Details
+  description String?
+  metadata    Json?       // Additional context (old values, new values, etc.)
+  
+  // Request context
+  ipAddress   String?     @map("ip_address")
+  userAgent   String?     @map("user_agent")
+  
+  createdAt   DateTime    @default(now()) @map("created_at")
+
+  @@index([createdAt])
+  @@index([userId])
+  @@index([entityType, entityId])
+  @@index([action])
+  @@map("audit_log")
+}
+
+// =============================================================================
+// WEBHOOK EVENTS
+// Audit log for all Stripe webhook events (idempotency + debugging)
+// =============================================================================
+
+model WebhookEvent {
+  id             String   @id @default(cuid())
+  stripeEventId  String   @unique @map("stripe_event_id")
+  eventType      String   @map("event_type")
+  payload        Json
+  processed      Boolean  @default(false)
+  processedAt    DateTime? @map("processed_at")
+  error          String?
+  
+  createdAt      DateTime @default(now()) @map("created_at")
+
+  @@index([stripeEventId])
+  @@index([eventType])
+  @@index([processed])
+  @@map("webhook_events")
+}
+
