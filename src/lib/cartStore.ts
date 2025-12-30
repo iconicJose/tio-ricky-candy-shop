@@ -8,6 +8,7 @@ export interface CartLineItem {
   size: string;
   priceCents: number;
   quantity: number;
+  customizations?: string;
 }
 
 export interface CartState {
@@ -87,7 +88,8 @@ class CartStore {
     productName: string,
     flavor: string,
     size: string,
-    priceCents: number
+    priceCents: number,
+    customizations?: string
   ): void {
     if (!this.initialized) this.init();
     
@@ -107,6 +109,7 @@ class CartStore {
         size,
         priceCents,
         quantity: 1,
+        customizations,
       });
     }
 

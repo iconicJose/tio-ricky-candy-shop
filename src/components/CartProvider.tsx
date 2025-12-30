@@ -3,17 +3,20 @@
 import { createContext, useContext, useEffect, useState, useCallback, ReactNode } from 'react';
 import { cartStore, CartState, CartLineItem } from '@/lib/cartStore';
 
+interface AddItemParams {
+  id: string;
+  name: string;
+  price: number;
+  flavor?: string;
+  size?: string;
+  customizations?: string;
+}
+
 interface CartContextValue {
   cart: CartState;
   totalQuantity: number;
   subtotalCents: number;
-  addItem: (
-    productId: string,
-    productName: string,
-    flavor: string,
-    size: string,
-    priceCents: number
-  ) => void;
+  addItem: (item: AddItemParams) => void;
   updateQuantity: (lineItemId: string, newQuantity: number) => void;
   removeItem: (lineItemId: string) => void;
   clearCart: () => void;
@@ -45,14 +48,17 @@ export function CartProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const addItem = useCallback(
-    (
-      productId: string,
-      productName: string,
-      flavor: string,
-      size: string,
-      priceCents: number
-    ) => {
-      cartStore.addItem(productId, productName, flavor, size, priceCents);
+    (item: AddItemParams) => {
+      // Convert price from dollars to cents
+      const priceCents = Math.round(item.price * 100);
+      cartStore.addItem(
+        item.id,
+        item.name,
+        item.flavor || '',
+        item.size || '',
+        priceCents,
+        item.customizations
+      );
       triggerCartAnimation();
     },
     [triggerCartAnimation]
