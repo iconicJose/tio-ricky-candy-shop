@@ -126,7 +126,9 @@ function CheckoutForm({
 // Main Checkout Page
 export default function CheckoutPage() {
   const router = useRouter();
-  const { items, getTotal } = useCart();
+  const { cart, subtotalCents, clearCart } = useCart();
+  const items = cart.items;
+  const getTotal = () => subtotalCents / 100;
   const [clientSecret, setClientSecret] = useState<string | null>(null);
   const [orderTotals, setOrderTotals] = useState({ subtotal: 0, shipping: 0, tax: 0, total: 0 });
   const [isLoading, setIsLoading] = useState(true);
@@ -181,8 +183,8 @@ export default function CheckoutPage() {
           body: JSON.stringify({
             items: items.map(item => ({
               id: item.id,
-              name: item.name,
-              price: item.price,
+              name: item.productName,
+              price: item.priceCents / 100,
               quantity: item.quantity,
               size: item.size,
               flavor: item.flavor,
@@ -299,7 +301,7 @@ export default function CheckoutPage() {
                       color: 'var(--text-primary)',
                       marginBottom: '0.25rem',
                     }}>
-                      {item.name}
+                      {item.productName}
                     </p>
                     {(item.size || item.flavor) && (
                       <p style={{
@@ -334,7 +336,7 @@ export default function CheckoutPage() {
                     fontWeight: 700,
                     color: 'var(--chamoy-red)',
                   }}>
-                    ${(item.price * item.quantity).toFixed(2)}
+                    ${((item.priceCents / 100) * item.quantity).toFixed(2)}
                   </p>
                 </div>
               ))}
