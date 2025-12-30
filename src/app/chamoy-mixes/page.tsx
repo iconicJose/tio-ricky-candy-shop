@@ -52,13 +52,14 @@ const candyOptionsWithPrices = [
   { name: 'Hard or Gummy Skittles', price: 3 },
 ];
 
-// Fruit options with prices
+// Fruit options with prices (prices are per fruit portion for the tray)
+// Total of all fruits = $52, slightly above $50 minimum
 const fruitOptions = [
-  { name: 'Mango', price: 8 },
-  { name: 'Strawberry', price: 6 },
-  { name: 'Pineapple', price: 7 },
-  { name: 'Watermelon', price: 5 },
-  { name: 'Grapes', price: 6 },
+  { name: 'Mango', price: 12 },
+  { name: 'Strawberry', price: 10 },
+  { name: 'Pineapple', price: 11 },
+  { name: 'Watermelon', price: 9 },
+  { name: 'Grapes', price: 10 },
 ];
 
 export default function CandyMixPage() {
@@ -78,6 +79,7 @@ export default function CandyMixPage() {
   const [candyTrayCount, setCandyTrayCount] = useState<5 | 6>(6);
   const [selectedCandies, setSelectedCandies] = useState<string[]>([]);
   const [includeChamoyDip, setIncludeChamoyDip] = useState(false);
+  const [selectedDipFlavor, setSelectedDipFlavor] = useState<string | null>(null);
   
   // Fruit Tray selections
   const [selectedFruits, setSelectedFruits] = useState<string[]>([]);
@@ -123,21 +125,33 @@ export default function CandyMixPage() {
     return basePrice;
   };
 
+  // Check if candy tray can be added (need candies + flavor if dip selected)
+  const canAddCandyTray = () => {
+    const maxCandies = includeChamoyDip ? 5 : 6;
+    const hasEnoughCandies = selectedCandies.length === maxCandies;
+    const hasFlavorIfNeeded = !includeChamoyDip || selectedDipFlavor !== null;
+    return hasEnoughCandies && hasFlavorIfNeeded;
+  };
+
   const handleAddCandyTrayToCart = () => {
-    const maxCandies = includeChamoyDip ? candyTrayCount - 1 : candyTrayCount;
-    if (selectedCandies.length !== maxCandies) return;
+    if (!canAddCandyTray()) return;
+
+    const dipInfo = includeChamoyDip && selectedDipFlavor 
+      ? ` + ${selectedDipFlavor} Chamoy Dip` 
+      : '';
 
     addItem({
       id: `candy-tray-${Date.now()}`,
-      name: `Candy Tray (${candyTrayCount} items${includeChamoyDip ? ' + Chamoy Dip' : ''})`,
+      name: `Candy Tray (${includeChamoyDip ? 5 : 6} candies${dipInfo})`,
       price: getCandyTrayTotal(),
-      customizations: selectedCandies.join(', ') + (includeChamoyDip ? ', Chamoy Dip' : ''),
+      customizations: selectedCandies.join(', ') + (includeChamoyDip ? `, ${selectedDipFlavor} Chamoy Dip` : ''),
     });
 
     setShowCandyTrayModal(false);
     setSelectedCandies([]);
     setCandyTrayCount(6);
     setIncludeChamoyDip(false);
+    setSelectedDipFlavor(null);
   };
 
   // Fruit Tray functions
@@ -150,12 +164,13 @@ export default function CandyMixPage() {
   };
 
   const getFruitTrayTotal = () => {
-    const basePrice = 50;
+    const minimumPrice = 50;
     const fruitsTotal = selectedFruits.reduce((sum, fruit) => {
       const fruitItem = fruitOptions.find(f => f.name === fruit);
       return sum + (fruitItem?.price || 0);
     }, 0);
-    return basePrice + fruitsTotal;
+    // $50 is the minimum, actual price is the higher of minimum or fruit selections
+    return Math.max(minimumPrice, fruitsTotal);
   };
 
   const handleAddFruitTrayToCart = () => {
@@ -600,7 +615,7 @@ export default function CandyMixPage() {
                 lineHeight: 1.7,
                 marginBottom: '1.5rem',
               }}>
-                A delicious candy platter mixed with our special chamoy flavors. Choose 6 candies OR 5 candies + chamoy dip!
+                A delicious candy platter mixed with our special chamoy flavors. Choose 6 candies or 5 candies + chamoy dip!
               </p>
               <button
                 onClick={() => setShowCandyTrayModal(true)}
@@ -765,6 +780,7 @@ export default function CandyMixPage() {
                   setSelectedCandies([]);
                   setCandyTrayCount(6);
                   setIncludeChamoyDip(false);
+                  setSelectedDipFlavor(null);
                 }}
                 style={{
                   background: 'none',
@@ -793,6 +809,7 @@ export default function CandyMixPage() {
                     setCandyTrayCount(6);
                     setIncludeChamoyDip(false);
                     setSelectedCandies([]);
+                    setSelectedDipFlavor(null);
                   }}
                   style={{
                     padding: '0.75rem 1.5rem',
@@ -826,6 +843,41 @@ export default function CandyMixPage() {
                 </button>
               </div>
             </div>
+
+            {/* Chamoy Flavor Selection (only when dip is included) */}
+            {includeChamoyDip && (
+              <div style={{ marginBottom: '1.5rem' }}>
+                <p style={{
+                  fontFamily: 'var(--font-body)',
+                  fontWeight: 600,
+                  marginBottom: '0.75rem',
+                }}>
+                  Choose your chamoy dip flavor:
+                </p>
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
+                  {flavors.map((flavor) => (
+                    <button
+                      key={flavor.name}
+                      onClick={() => setSelectedDipFlavor(flavor.name)}
+                      style={{
+                        padding: '0.5rem 1rem',
+                        fontFamily: 'var(--font-display)',
+                        fontSize: '0.9375rem',
+                        fontWeight: 600,
+                        color: selectedDipFlavor === flavor.name ? 'var(--white)' : flavor.color,
+                        backgroundColor: selectedDipFlavor === flavor.name ? flavor.color : 'var(--white)',
+                        border: `2px solid ${flavor.color}`,
+                        borderRadius: '8px',
+                        cursor: 'pointer',
+                        transition: 'all 0.2s ease',
+                      }}
+                    >
+                      {flavor.name}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
 
             {/* Candy Selection */}
             <div style={{ marginBottom: '1.5rem' }}>
@@ -897,14 +949,14 @@ export default function CandyMixPage() {
                   color: 'var(--text-secondary)',
                   marginTop: '0.5rem',
                 }}>
-                  {selectedCandies.join(', ')}{includeChamoyDip ? ', Chamoy Dip' : ''}
+                  {selectedCandies.join(', ')}{includeChamoyDip && selectedDipFlavor ? `, ${selectedDipFlavor} Chamoy Dip` : includeChamoyDip ? ', Chamoy Dip' : ''}
                 </p>
               )}
             </div>
 
             <button
               onClick={handleAddCandyTrayToCart}
-              disabled={selectedCandies.length !== (includeChamoyDip ? 5 : 6)}
+              disabled={!canAddCandyTray()}
               style={{
                 width: '100%',
                 padding: '1rem',
@@ -912,15 +964,23 @@ export default function CandyMixPage() {
                 fontSize: '1rem',
                 fontWeight: 700,
                 color: 'var(--white)',
-                backgroundColor: selectedCandies.length === (includeChamoyDip ? 5 : 6) ? 'var(--chamoy-red)' : 'var(--gray-300)',
+                backgroundColor: canAddCandyTray() ? 'var(--chamoy-red)' : 'var(--gray-300)',
                 border: 'none',
                 borderRadius: '10px',
-                cursor: selectedCandies.length === (includeChamoyDip ? 5 : 6) ? 'pointer' : 'not-allowed',
+                cursor: canAddCandyTray() ? 'pointer' : 'not-allowed',
               }}
             >
-              {selectedCandies.length === (includeChamoyDip ? 5 : 6) 
-                ? `Add to Cart - $${getCandyTrayTotal()}`
-                : `Select ${(includeChamoyDip ? 5 : 6) - selectedCandies.length} more candies`}
+              {(() => {
+                const maxCandies = includeChamoyDip ? 5 : 6;
+                const candiesNeeded = maxCandies - selectedCandies.length;
+                if (candiesNeeded > 0) {
+                  return `Select ${candiesNeeded} more candies`;
+                }
+                if (includeChamoyDip && !selectedDipFlavor) {
+                  return 'Select chamoy dip flavor';
+                }
+                return `Add to Cart - $${getCandyTrayTotal()}`;
+              })()}
             </button>
           </div>
         </div>
@@ -988,7 +1048,7 @@ export default function CandyMixPage() {
               color: 'var(--text-secondary)',
               marginBottom: '1.5rem',
             }}>
-              Select the fruits you'd like. Each fruit adds to the base price of $50.
+              Select the fruits you'd like. Minimum tray price is $50 — price adjusts if your selection exceeds that.
             </p>
 
             {/* Fruit Selection */}
@@ -1043,7 +1103,7 @@ export default function CandyMixPage() {
                       fontWeight: 700,
                       color: 'var(--chamoy-red)',
                     }}>
-                      +${fruit.price}
+                      ${fruit.price}
                     </span>
                   </button>
                 );
@@ -1057,33 +1117,61 @@ export default function CandyMixPage() {
               padding: '1rem',
               marginBottom: '1rem',
             }}>
+              {selectedFruits.length > 0 ? (
+                <>
+                  {selectedFruits.map(fruit => {
+                    const fruitItem = fruitOptions.find(f => f.name === fruit);
+                    return (
+                      <div key={fruit} style={{
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        marginBottom: '0.25rem',
+                        fontSize: '0.9375rem',
+                        color: 'var(--text-secondary)',
+                      }}>
+                        <span>{fruit}</span>
+                        <span>${fruitItem?.price}.00</span>
+                      </div>
+                    );
+                  })}
+                  {(() => {
+                    const fruitsTotal = selectedFruits.reduce((sum, fruit) => {
+                      const fruitItem = fruitOptions.find(f => f.name === fruit);
+                      return sum + (fruitItem?.price || 0);
+                    }, 0);
+                    const total = getFruitTrayTotal();
+                    if (fruitsTotal < 50) {
+                      return (
+                        <div style={{
+                          display: 'flex',
+                          justifyContent: 'space-between',
+                          marginBottom: '0.25rem',
+                          fontSize: '0.875rem',
+                          color: 'var(--warm-orange)',
+                          fontStyle: 'italic',
+                        }}>
+                          <span>Minimum price applied</span>
+                          <span>($50 min)</span>
+                        </div>
+                      );
+                    }
+                    return null;
+                  })()}
+                </>
+              ) : (
+                <p style={{
+                  fontSize: '0.9375rem',
+                  color: 'var(--text-muted)',
+                  textAlign: 'center',
+                  margin: 0,
+                }}>
+                  Select fruits to see pricing
+                </p>
+              )}
               <div style={{
-                display: 'flex',
-                justifyContent: 'space-between',
-                marginBottom: '0.5rem',
-              }}>
-                <span>Base Price:</span>
-                <span>$50.00</span>
-              </div>
-              {selectedFruits.map(fruit => {
-                const fruitItem = fruitOptions.find(f => f.name === fruit);
-                return (
-                  <div key={fruit} style={{
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    marginBottom: '0.25rem',
-                    fontSize: '0.9375rem',
-                    color: 'var(--text-secondary)',
-                  }}>
-                    <span>+ {fruit}</span>
-                    <span>${fruitItem?.price}.00</span>
-                  </div>
-                );
-              })}
-              <div style={{
-                borderTop: '2px solid var(--gray-300)',
-                marginTop: '0.75rem',
-                paddingTop: '0.75rem',
+                borderTop: selectedFruits.length > 0 ? '2px solid var(--gray-300)' : 'none',
+                marginTop: selectedFruits.length > 0 ? '0.75rem' : 0,
+                paddingTop: selectedFruits.length > 0 ? '0.75rem' : 0,
                 display: 'flex',
                 justifyContent: 'space-between',
                 alignItems: 'center',
@@ -1095,7 +1183,7 @@ export default function CandyMixPage() {
                   fontWeight: 700,
                   color: 'var(--chamoy-red)',
                 }}>
-                  ${getFruitTrayTotal()}
+                  ${selectedFruits.length > 0 ? getFruitTrayTotal() : 50}+
                 </span>
               </div>
             </div>
