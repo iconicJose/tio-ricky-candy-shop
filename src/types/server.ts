@@ -9,14 +9,47 @@
 
 import 'server-only';
 
-// Re-export Prisma types for server use
-export type {
-  User,
-  Product as PrismaProduct,
-  Order,
-  OrderItem,
-  WebhookEvent,
-} from '@prisma/client';
+// Mock types for deployment without database
+// Replace with Prisma types when database is configured
+export interface User {
+  id: string;
+  email: string;
+  name: string;
+  role: 'ADMIN' | 'WORKER';
+}
+
+export interface PrismaProduct {
+  id: string;
+  name: string;
+  slug: string;
+  description: string | null;
+  priceCents: number;
+  stock: number;
+  active: boolean;
+  imageUrl: string | null;
+}
+
+export interface Order {
+  id: string;
+  status: string;
+  totalCents: number;
+  createdAt: Date;
+}
+
+export interface OrderItem {
+  id: string;
+  orderId: string;
+  productId: string;
+  quantity: number;
+  priceCents: number;
+}
+
+export interface WebhookEvent {
+  id: string;
+  type: string;
+  payload: string;
+  processedAt: Date | null;
+}
 
 // =============================================================================
 // AUTH TYPES
