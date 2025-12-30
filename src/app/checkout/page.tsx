@@ -1,5 +1,6 @@
 'use client';
 
+// Stripe Checkout Page - Updated Dec 29, 2025
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { Elements, PaymentElement, useStripe, useElements } from '@stripe/react-stripe-js';
