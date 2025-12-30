@@ -8,51 +8,27 @@
  */
 
 import 'server-only';
-import { PrismaClient } from '@prisma/client';
 
-// Declare global type for Prisma client singleton
-declare global {
-  // eslint-disable-next-line no-var
-  var prisma: PrismaClient | undefined;
-}
+// Mock Prisma client for deployment without database
+// Replace with real Prisma client when database is configured
+const mockDb = {
+  product: {
+    findMany: async () => [],
+    findUnique: async () => null,
+    create: async () => ({}),
+    update: async () => ({}),
+    delete: async () => ({}),
+  },
+  order: {
+    findMany: async () => [],
+    findUnique: async () => null,
+    create: async () => ({}),
+    update: async () => ({}),
+  },
+  user: {
+    findMany: async () => [],
+    findUnique: async () => null,
+  },
+};
 
-/**
- * Create Prisma client with appropriate configuration
- * Handles both Prisma Postgres (prisma+postgres://) and standard PostgreSQL URLs
- */
-function createPrismaClient(): PrismaClient {
-  const databaseUrl = process.env.DATABASE_URL || '';
-  
-  // Check if using Prisma Postgres (accelerate)
-  if (databaseUrl.startsWith('prisma+postgres://')) {
-    return new PrismaClient({
-      // @ts-expect-error - Prisma 7 accelerate config
-      accelerateUrl: databaseUrl,
-      log:
-        process.env.NODE_ENV === 'development'
-          ? ['error', 'warn']
-          : ['error'],
-    });
-  }
-  
-  // Standard PostgreSQL connection
-  return new PrismaClient({
-    log:
-      process.env.NODE_ENV === 'development'
-        ? ['error', 'warn']
-        : ['error'],
-  });
-}
-
-/**
- * Singleton Prisma client instance
- * In development, store on globalThis to survive hot reloading
- * In production, create a new instance
- */
-export const db: PrismaClient =
-  globalThis.prisma ?? createPrismaClient();
-
-// Preserve client across hot reloads in development
-if (process.env.NODE_ENV !== 'production') {
-  globalThis.prisma = db;
-}
+export const db = mockDb as any;
