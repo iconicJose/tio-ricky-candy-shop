@@ -1,0 +1,2 @@
+:HL["/tio-ricky-candy-shop/_next/static/chunks/271e5428a6fbaa46.css","style"]
+0:{"buildId":"gTjWu6TLnujKWucEf6cHY","tree":{"name":"","paramType":null,"paramKey":"","hasRuntimePrefetch":false,"slots":{"children":{"name":"cart","paramType":null,"paramKey":"cart","hasRuntimePrefetch":false,"slots":{"children":{"name":"__PAGE__","paramType":null,"paramKey":"__PAGE__","hasRuntimePrefetch":false,"slots":null,"isRootLayout":false}},"isRootLayout":false}},"isRootLayout":true},"staleTime":300}

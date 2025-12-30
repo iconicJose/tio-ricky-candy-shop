@@ -1,0 +1,5 @@
+1:"$Sreact.fragment"
+2:I[97367,["/tio-ricky-candy-shop/_next/static/chunks/74a6c0932e8c784d.js","/tio-ricky-candy-shop/_next/static/chunks/7340adf74ff47ec0.js"],"ViewportBoundary"]
+3:I[97367,["/tio-ricky-candy-shop/_next/static/chunks/74a6c0932e8c784d.js","/tio-ricky-candy-shop/_next/static/chunks/7340adf74ff47ec0.js"],"MetadataBoundary"]
+4:"$Sreact.suspense"
+0:{"buildId":"gTjWu6TLnujKWucEf6cHY","rsc":["$","$1","h",{"children":[["$","meta",null,{"name":"robots","content":"noindex"}],["$","$L2",null,{"children":[["$","meta","0",{"charSet":"utf-8"}],["$","meta","1",{"name":"viewport","content":"width=device-width, initial-scale=1"}]]}],["$","div",null,{"hidden":true,"children":["$","$L3",null,{"children":["$","$4",null,{"name":"Next.Metadata","children":[["$","title","0",{"children":"Pik-A-Mela | Authentic Mexican Chamoy Treats"}],["$","meta","1",{"name":"description","content":"Family-made chamoy candies, gummies, and Mexican treats. Handcrafted with love using traditional recipes."}]]}]}]}],null]}],"loading":null,"isPartial":false}
