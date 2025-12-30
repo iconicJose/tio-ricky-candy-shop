@@ -14,8 +14,10 @@ interface AddItemParams {
 
 interface CartContextValue {
   cart: CartState;
+  items: CartLineItem[];
   totalQuantity: number;
   subtotalCents: number;
+  getTotal: () => number;
   addItem: (item: AddItemParams) => void;
   updateQuantity: (lineItemId: string, newQuantity: number) => void;
   removeItem: (lineItemId: string) => void;
@@ -82,12 +84,17 @@ export function CartProvider({ children }: { children: ReactNode }) {
     0
   );
 
+  const items = cart.items;
+  const getTotal = useCallback(() => subtotalCents / 100, [subtotalCents]);
+
   return (
     <CartContext.Provider
       value={{
         cart,
+        items,
         totalQuantity,
         subtotalCents,
+        getTotal,
         addItem,
         updateQuantity,
         removeItem,

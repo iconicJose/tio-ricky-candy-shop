@@ -127,9 +127,7 @@ function CheckoutForm({
 // Main Checkout Page
 export default function CheckoutPage() {
   const router = useRouter();
-  const { cart, subtotalCents, clearCart } = useCart();
-  const items = cart.items;
-  const getTotal = () => subtotalCents / 100;
+  const { items, getTotal, clearCart } = useCart();
   const [clientSecret, setClientSecret] = useState<string | null>(null);
   const [orderTotals, setOrderTotals] = useState({ subtotal: 0, shipping: 0, tax: 0, total: 0 });
   const [isLoading, setIsLoading] = useState(true);
