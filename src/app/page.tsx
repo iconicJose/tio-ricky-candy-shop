@@ -1,4 +1,3 @@
-import { db } from '@/lib/db';
 import Link from 'next/link';
 
 // Sample categories for display
@@ -8,35 +7,7 @@ const categories = [
   { name: 'Chamoy Mixes', slug: 'chamoy-mixes', description: 'Our signature chamoy blends' },
 ];
 
-export default async function HomePage() {
-  // Fetch products from database
-  let products: Array<{
-    id: string;
-    name: string;
-    description: string | null;
-    priceCents: number;
-    imageUrl: string | null;
-    stockQuantity: number;
-  }> = [];
-  
-  try {
-    products = await db.product.findMany({
-      where: { active: true },
-      orderBy: { name: 'asc' },
-      select: {
-        id: true,
-        name: true,
-        description: true,
-        priceCents: true,
-        imageUrl: true,
-        stockQuantity: true,
-      },
-    });
-  } catch {
-    // Database not connected - show empty state
-    products = [];
-  }
-
+export default function HomePage() {
   return (
     <>
       {/* ===== HERO SECTION ===== */}
@@ -117,12 +88,19 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* ===== FEATURED CATEGORIES ===== */}
-      <section style={{
+      {/* ===== OUR TREATS - CATEGORIES ===== */}
+      <section id="products" className="section" style={{
         backgroundColor: 'var(--off-white)',
         padding: 'clamp(2rem, 6vw, 4rem) 0',
       }}>
         <div className="container">
+          {/* Section Header */}
+          <div className="category-header">
+            <h2>Our Treats</h2>
+            <p>Every piece made fresh with authentic chamoy</p>
+            <div className="decorative-line" />
+          </div>
+
           <div style={{
             display: 'grid',
             gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
@@ -162,123 +140,6 @@ export default async function HomePage() {
               </Link>
             ))}
           </div>
-        </div>
-      </section>
-
-      {/* ===== PRODUCTS SECTION ===== */}
-      <section id="products" className="section" style={{
-        backgroundColor: 'var(--white)',
-      }}>
-        <div className="container">
-          {/* Section Header */}
-          <div className="category-header">
-            <h2>Our Treats</h2>
-            <p>Every piece made fresh with authentic chamoy</p>
-            <div className="decorative-line" />
-          </div>
-
-          {/* Product Grid */}
-          {products.length > 0 ? (
-            <div style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))',
-              gap: '1.5rem',
-            }}>
-              {products.map((product) => (
-                <article key={product.id} className="product-card">
-                  {/* Product Image */}
-                  <div className="product-card-image">
-                    {product.imageUrl ? (
-                      <img src={product.imageUrl} alt={product.name} />
-                    ) : (
-                      <div style={{
-                        width: '100%',
-                        height: '100%',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        backgroundColor: 'var(--gray-100)',
-                        fontSize: '4rem',
-                      }}>
-                        🍬
-                      </div>
-                    )}
-                  </div>
-                  
-                  {/* Product Info */}
-                  <div className="product-card-content">
-                    <h3 className="product-card-title">{product.name}</h3>
-                    
-                    {product.description && (
-                      <p style={{
-                        fontSize: '0.875rem',
-                        color: 'var(--text-secondary)',
-                        marginBottom: '0.75rem',
-                        display: '-webkit-box',
-                        WebkitLineClamp: 2,
-                        WebkitBoxOrient: 'vertical',
-                        overflow: 'hidden',
-                        lineHeight: 1.5,
-                      }}>
-                        {product.description}
-                      </p>
-                    )}
-                    
-                    <div style={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'space-between',
-                      marginTop: 'auto',
-                    }}>
-                     <p className="product-card-price">
-                        ${(product.priceCents / 100).toFixed(2)}
-                      </p>
-                      
-                      <span style={{
-                        fontSize: '0.75rem',
-                        color: product.stockQuantity > 10 ? 'var(--accent-green)' : 'var(--warm-orange)',
-                        fontWeight: 500,
-                      }}>
-                        {product.stockQuantity > 10 ? 'In Stock' : `Only ${product.stockQuantity} left`}
-                      </span>
-                    </div>
-                    
-                    <button 
-                      className="btn btn-primary"
-                      style={{
-                        width: '100%',
-                        marginTop: '1rem',
-                        padding: '0.75rem',
-                      }}
-                    >
-                      Add to Cart
-                    </button>
-                  </div>
-                </article>
-              ))}
-            </div>
-          ) : (
-            <div style={{
-              textAlign: 'center',
-              padding: '4rem 2rem',
-              backgroundColor: 'var(--gray-50)',
-              borderRadius: '12px',
-            }}>
-              <p style={{
-                fontSize: '1.25rem',
-                color: 'var(--text-secondary)',
-                marginBottom: '1rem',
-              }}>
-                Products coming soon!
-              </p>
-              <p style={{
-                fontSize: '0.875rem',
-                color: 'var(--text-muted)',
-              }}>
-                Connect to the database and run the seed script to see products.
-              </p>
-            </div>
-          )}
         </div>
       </section>
 
