@@ -2,9 +2,9 @@ import Link from 'next/link';
 
 // Sample categories for display
 const categories = [
+  { name: 'Candy Mix', slug: 'chamoy-mixes', description: 'Homemade chamoy candies in 5 delicious flavors' },
   { name: 'Gummies', slug: 'gummies', description: 'Sweet & tangy chamoy-coated gummies' },
   { name: 'Carne Seca', slug: 'carne-seca', description: 'Traditional dried meat with chili' },
-  { name: 'Chamoy Mixes', slug: 'chamoy-mixes', description: 'Our signature chamoy blends' },
 ];
 
 export default function HomePage() {
