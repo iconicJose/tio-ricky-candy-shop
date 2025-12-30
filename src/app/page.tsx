@@ -16,7 +16,7 @@ export default async function HomePage() {
     description: string | null;
     priceCents: number;
     imageUrl: string | null;
-    stock: number;
+    stockQuantity: number;
   }> = [];
   
   try {
@@ -29,7 +29,7 @@ export default async function HomePage() {
         description: true,
         priceCents: true,
         imageUrl: true,
-        stock: true,
+        stockQuantity: true,
       },
     });
   } catch {
@@ -230,16 +230,16 @@ export default async function HomePage() {
                       justifyContent: 'space-between',
                       marginTop: 'auto',
                     }}>
-                      <p className="product-card-price">
+                     <p className="product-card-price">
                         ${(product.priceCents / 100).toFixed(2)}
                       </p>
                       
                       <span style={{
                         fontSize: '0.75rem',
-                        color: product.stock > 10 ? 'var(--accent-green)' : 'var(--warm-orange)',
+                        color: product.stockQuantity > 10 ? 'var(--accent-green)' : 'var(--warm-orange)',
                         fontWeight: 500,
                       }}>
-                        {product.stock > 10 ? 'In Stock' : `Only ${product.stock} left`}
+                        {product.stockQuantity > 10 ? 'In Stock' : `Only ${product.stockQuantity} left`}
                       </span>
                     </div>
                     

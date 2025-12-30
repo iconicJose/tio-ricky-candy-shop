@@ -1,37 +1,25 @@
 /**
  * Orders API - Create Order / Checkout
- * =====================================
- * Creates a new order and initiates Stripe checkout session.
- * 
- * SECURITY CRITICAL:
- * - Cart items are validated against server-side product data
- * - Prices are ALWAYS fetched from database, never from client
- * - Stock is validated and reserved atomically
+ * ===================================
+ * Creates a new order and initiates checkout.
+ *
+ * NOTE: For GitHub Pages (static export), this is a static stub.
  */
 
-import { NextRequest, NextResponse } from 'next/server';
-// import { db } from '@/lib/db';
+import { NextResponse } from 'next/server';
 
-// TODO: Implement when database and Stripe are connected
-export async function POST(request: NextRequest) {
-  // Placeholder - will implement full checkout flow
-  const body = await request.json().catch(() => null);
+export const dynamic = 'force-static';
 
-  if (!body) {
-    return NextResponse.json(
-      { error: 'Invalid request body' },
-      { status: 400 }
-    );
-  }
-
-  console.warn('⚠️  Orders API hit - full implementation pending');
-
-  // Placeholder response
+export async function GET() {
   return NextResponse.json(
-    { 
-      message: 'Orders endpoint stub - implementation pending',
-      received: body,
-    },
-    { status: 501 } // Not Implemented
+    { error: 'Orders API is not available in this static deployment' },
+    { status: 501 }
+  );
+}
+
+export async function POST() {
+  return NextResponse.json(
+    { error: 'Orders API is not available in this static deployment' },
+    { status: 501 }
   );
 }
