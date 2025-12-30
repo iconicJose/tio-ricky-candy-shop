@@ -73,15 +73,19 @@ export default function RootLayout({
                     Shop
                   </h4>
                   <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
-                    {['Gummies', 'Carne Seca', 'Chamoy Mixes', 'Gift Boxes'].map((item) => (
-                      <li key={item} style={{ marginBottom: '0.5rem' }}>
-                        <Link href="/" style={{
+                    {[
+                      { name: 'Candy Mix', href: '/chamoy-mixes' },
+                      { name: 'Pik-A-Mela Chamoy', href: '/chamoy' },
+                      { name: 'Antojitos', href: '/antojitos' },
+                    ].map((item) => (
+                      <li key={item.name} style={{ marginBottom: '0.5rem' }}>
+                        <Link href={item.href} style={{
                           color: 'var(--gray-400)',
                           textDecoration: 'none',
                           fontSize: '0.875rem',
                           transition: 'color 0.2s',
                         }}>
-                          {item}
+                          {item.name}
                         </Link>
                       </li>
                     ))}

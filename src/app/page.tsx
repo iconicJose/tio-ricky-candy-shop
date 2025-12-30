@@ -10,17 +10,63 @@ const categories = [
 export default function HomePage() {
   return (
     <>
+      {/* Red Ruffle under header */}
+      <div style={{ backgroundColor: 'var(--chamoy-red)', lineHeight: 0, marginTop: '-1px' }}>
+        <svg viewBox="0 0 1200 30" preserveAspectRatio="none" style={{ display: 'block', width: '100%', height: '18px' }}>
+          <path d="M0,30 Q75,0 150,30 T300,30 T450,30 T600,30 T750,30 T900,30 T1050,30 T1200,30 L1200,0 L0,0 Z" fill="var(--white)" />
+        </svg>
+      </div>
+      <div style={{ backgroundColor: 'var(--chamoy-red)', height: '10px' }} />
+      <div style={{ backgroundColor: 'var(--white)', lineHeight: 0 }}>
+        <svg viewBox="0 0 1200 30" preserveAspectRatio="none" style={{ display: 'block', width: '100%', height: '18px' }}>
+          <path d="M0,30 Q75,0 150,30 T300,30 T450,30 T600,30 T750,30 T900,30 T1050,30 T1200,30 L1200,0 L0,0 Z" fill="var(--chamoy-red)" />
+        </svg>
+      </div>
+
       {/* ===== HERO SECTION ===== */}
       <section style={{
         backgroundColor: 'var(--white)',
-        paddingTop: 'clamp(4rem, 12vw, 8rem)',
+        paddingTop: 'clamp(2rem, 8vw, 5rem)',
         paddingBottom: 'clamp(4rem, 12vw, 8rem)',
+        position: 'relative',
+        overflow: 'hidden',
       }}>
+        {/* Piñata Confetti Burst */}
+        <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none', overflow: 'hidden' }}>
+          {/* Top left cluster */}
+          <span style={{ position: 'absolute', top: '8%', left: '5%', fontSize: '1.5rem', opacity: 0.8, transform: 'rotate(-15deg)' }}>🍬</span>
+          <span style={{ position: 'absolute', top: '15%', left: '12%', fontSize: '1rem', opacity: 0.7, transform: 'rotate(20deg)' }}>💛</span>
+          <span style={{ position: 'absolute', top: '25%', left: '8%', fontSize: '1.25rem', opacity: 0.6, transform: 'rotate(-30deg)' }}>🍭</span>
+          <span style={{ position: 'absolute', top: '5%', left: '18%', fontSize: '0.875rem', opacity: 0.5, transform: 'rotate(45deg)' }}>✨</span>
+          
+          {/* Top right cluster */}
+          <span style={{ position: 'absolute', top: '10%', right: '8%', fontSize: '1.5rem', opacity: 0.8, transform: 'rotate(15deg)' }}>🍬</span>
+          <span style={{ position: 'absolute', top: '18%', right: '15%', fontSize: '1rem', opacity: 0.7, transform: 'rotate(-25deg)' }}>💜</span>
+          <span style={{ position: 'absolute', top: '28%', right: '6%', fontSize: '1.25rem', opacity: 0.6, transform: 'rotate(30deg)' }}>🍭</span>
+          <span style={{ position: 'absolute', top: '8%', right: '20%', fontSize: '0.875rem', opacity: 0.5, transform: 'rotate(-40deg)' }}>✨</span>
+          
+          {/* Mid left */}
+          <span style={{ position: 'absolute', top: '45%', left: '3%', fontSize: '1.25rem', opacity: 0.5, transform: 'rotate(10deg)' }}>🧡</span>
+          <span style={{ position: 'absolute', top: '55%', left: '10%', fontSize: '1rem', opacity: 0.4, transform: 'rotate(-20deg)' }}>🍬</span>
+          
+          {/* Mid right */}
+          <span style={{ position: 'absolute', top: '42%', right: '4%', fontSize: '1.25rem', opacity: 0.5, transform: 'rotate(-10deg)' }}>💚</span>
+          <span style={{ position: 'absolute', top: '58%', right: '12%', fontSize: '1rem', opacity: 0.4, transform: 'rotate(25deg)' }}>🍬</span>
+          
+          {/* Bottom scattered */}
+          <span style={{ position: 'absolute', bottom: '15%', left: '15%', fontSize: '1rem', opacity: 0.4, transform: 'rotate(35deg)' }}>💗</span>
+          <span style={{ position: 'absolute', bottom: '20%', right: '18%', fontSize: '1rem', opacity: 0.4, transform: 'rotate(-35deg)' }}>💙</span>
+          <span style={{ position: 'absolute', bottom: '10%', left: '25%', fontSize: '0.875rem', opacity: 0.3, transform: 'rotate(15deg)' }}>✨</span>
+          <span style={{ position: 'absolute', bottom: '8%', right: '25%', fontSize: '0.875rem', opacity: 0.3, transform: 'rotate(-15deg)' }}>✨</span>
+        </div>
+
         <div className="container" style={{
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
           textAlign: 'center',
+          position: 'relative',
+          zIndex: 1,
         }}>
           {/* Small decorative text */}
           <p style={{
@@ -58,7 +104,7 @@ export default function HomePage() {
             marginBottom: '2.5rem',
             lineHeight: 1.7,
           }}>
-            [Client-provided tagline goes here]
+            [catchy tagline by ricky]
           </p>
 
           {/* CTA Buttons */}
