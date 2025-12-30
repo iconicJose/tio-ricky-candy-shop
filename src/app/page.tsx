@@ -4,7 +4,7 @@ import Link from 'next/link';
 const categories = [
   { name: 'Candy Mix', slug: 'chamoy-mixes', description: 'Homemade chamoy candies in 5 delicious flavors' },
   { name: 'Pik-A-Mela Chamoy', slug: 'chamoy', description: 'Our special homemade sweet and spicy chamoy' },
-  { name: 'Carne Seca', slug: 'carne-seca', description: 'Traditional dried meat with chili' },
+  { name: 'Antojitos', slug: 'antojitos', description: 'Churro puffs, carne seca & more savory treats' },
 ];
 
 export default function HomePage() {
