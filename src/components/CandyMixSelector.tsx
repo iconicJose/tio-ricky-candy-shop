@@ -55,13 +55,13 @@ export function CandyMixSelector({ showAddToCart = true }: CandyMixSelectorProps
     try {
       const sizeData = SIZES.find(s => s.name === selectedSize)!;
       
-      addItem(
-        'candy-mix',
-        'Candy Mix',
-        selectedFlavor,
-        selectedSize,
-        sizeData.priceCents
-      );
+      addItem({
+        id: `candy-mix-${selectedFlavor?.toLowerCase()}-${selectedSize?.toLowerCase()}`,
+        name: 'Candy Mix',
+        price: sizeData.price,
+        flavor: selectedFlavor!,
+        size: selectedSize!,
+      });
       
       // Brief delay for feedback
       await new Promise((resolve) => setTimeout(resolve, 300));
