@@ -51,26 +51,6 @@ export function Header() {
           }}>
             Shop
           </Link>
-          <Link href="/about" style={{
-            fontFamily: 'var(--font-body)',
-            fontSize: '0.9375rem',
-            fontWeight: 500,
-            color: 'var(--text-secondary)',
-            textDecoration: 'none',
-            transition: 'color 0.2s',
-          }}>
-            Our Story
-          </Link>
-          <Link href="/admin" style={{
-            fontFamily: 'var(--font-body)',
-            fontSize: '0.9375rem',
-            fontWeight: 500,
-            color: 'var(--text-secondary)',
-            textDecoration: 'none',
-            transition: 'color 0.2s',
-          }}>
-            Admin
-          </Link>
         </nav>
 
         {/* Cart Button */}

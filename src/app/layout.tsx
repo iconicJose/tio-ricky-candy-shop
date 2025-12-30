@@ -133,14 +133,14 @@ export default function RootLayout({
                 }}>
                   © 2024 Pik-A-Mela. Hecho con ❤️ en Chicago.
                 </p>
-                <p style={{
+                <Link href="/admin" style={{
                   fontSize: '0.8125rem',
                   color: 'var(--gray-500)',
-                  margin: 0,
-                  fontStyle: 'italic',
+                  textDecoration: 'none',
+                  transition: 'color 0.2s',
                 }}>
-                  Family-owned & operated
-                </p>
+                  Admin Login
+                </Link>
               </div>
             </div>
           </footer>
