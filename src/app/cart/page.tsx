@@ -849,24 +849,28 @@ export default function CartPage() {
                 </p>
               </div>
 
-              <button
-                disabled
+              <Link
+                href="/checkout"
                 style={{
+                  display: 'block',
                   width: '100%',
                   padding: '1rem',
-                  backgroundColor: 'var(--gray-300)',
-                  color: 'var(--gray-500)',
+                  backgroundColor: 'var(--chamoy-red)',
+                  color: 'var(--white)',
                   border: 'none',
                   borderRadius: '8px',
                   fontFamily: 'var(--font-body)',
                   fontSize: '1rem',
                   fontWeight: 600,
-                  cursor: 'not-allowed',
+                  cursor: 'pointer',
                   marginBottom: '1rem',
+                  textAlign: 'center',
+                  textDecoration: 'none',
+                  transition: 'background-color 0.2s ease',
                 }}
               >
-                Checkout (Coming Soon)
-              </button>
+                Proceed to Checkout
+              </Link>
 
               <Link
                 href="/"
