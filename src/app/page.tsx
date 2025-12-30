@@ -3,7 +3,7 @@ import Link from 'next/link';
 // Sample categories for display
 const categories = [
   { name: 'Candy Mix', slug: 'chamoy-mixes', description: 'Homemade chamoy candies in 5 delicious flavors' },
-  { name: 'Gummies', slug: 'gummies', description: 'Sweet & tangy chamoy-coated gummies' },
+  { name: 'Pik-A-Mela Chamoy', slug: 'chamoy', description: 'Our special homemade sweet and spicy chamoy' },
   { name: 'Carne Seca', slug: 'carne-seca', description: 'Traditional dried meat with chili' },
 ];
 
