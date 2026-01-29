@@ -43,8 +43,8 @@ export default function RootLayout({
 
           {/* Footer */}
           <footer style={{
-            backgroundColor: 'var(--gray-900)',
-            color: 'var(--white)',
+            backgroundColor: '#111827',
+            color: '#ffffff',
             padding: '4rem 0 2rem',
             marginTop: '4rem',
           }}>
@@ -62,13 +62,13 @@ export default function RootLayout({
                     fontSize: '1.5rem',
                     fontWeight: 700,
                     marginBottom: '1rem',
-                    color: 'var(--white)',
+                    color: '#ffffff',
                   }}>
                     Pik-A-Mela
                   </h3>
                   <p style={{
                     fontSize: '0.875rem',
-                    color: 'var(--gray-400)',
+                    color: '#9CA3AF',
                     lineHeight: 1.7,
                   }}>
                     Family-made chamoy candies and traditional recipes.
@@ -83,7 +83,7 @@ export default function RootLayout({
                     textTransform: 'uppercase',
                     letterSpacing: '0.05em',
                     marginBottom: '1rem',
-                    color: 'var(--gray-300)',
+                    color: '#D1D5DB',
                   }}>
                     Shop
                   </h4>
@@ -95,7 +95,7 @@ export default function RootLayout({
                     ].map((item) => (
                       <li key={item.name} style={{ marginBottom: '0.5rem' }}>
                         <Link href={item.href} style={{
-                          color: 'var(--gray-400)',
+                          color: '#9CA3AF',
                           textDecoration: 'none',
                           fontSize: '0.875rem',
                           transition: 'color 0.2s',
@@ -115,20 +115,20 @@ export default function RootLayout({
                     textTransform: 'uppercase',
                     letterSpacing: '0.05em',
                     marginBottom: '1rem',
-                    color: 'var(--gray-300)',
+                    color: '#D1D5DB',
                   }}>
                     Contact
                   </h4>
                   <p style={{
                     fontSize: '0.875rem',
-                    color: 'var(--gray-400)',
+                    color: '#9CA3AF',
                     marginBottom: '0.5rem',
                   }}>
                     email@email.com
                   </p>
                   <p style={{
                     fontSize: '0.875rem',
-                    color: 'var(--gray-400)',
+                    color: '#9CA3AF',
                     marginBottom: '0.5rem',
                   }}>
                     Chicago, Illinois
@@ -142,7 +142,7 @@ export default function RootLayout({
                       target="_blank" 
                       rel="noopener noreferrer"
                       style={{ 
-                        color: 'var(--gray-400)', 
+                        color: '#9CA3AF', 
                         transition: 'color 0.2s',
                         display: 'flex',
                         alignItems: 'center',
@@ -160,7 +160,7 @@ export default function RootLayout({
                       target="_blank" 
                       rel="noopener noreferrer"
                       style={{ 
-                        color: 'var(--gray-400)', 
+                        color: '#9CA3AF', 
                         transition: 'color 0.2s',
                         display: 'flex',
                         alignItems: 'center',
@@ -177,7 +177,7 @@ export default function RootLayout({
 
               {/* Bottom Bar */}
               <div style={{
-                borderTop: '1px solid var(--gray-800)',
+                borderTop: '1px solid #1F2937',
                 paddingTop: '2rem',
                 display: 'flex',
                 justifyContent: 'space-between',
@@ -187,14 +187,14 @@ export default function RootLayout({
               }}>
                 <p style={{
                   fontSize: '0.8125rem',
-                  color: 'var(--gray-500)',
+                  color: '#6B7280',
                   margin: 0,
                 }}>
                   © 2024 Pik-A-Mela. Hecho con ❤️ en Chicago.
                 </p>
                 <Link href="/admin" style={{
                   fontSize: '0.8125rem',
-                  color: 'var(--gray-500)',
+                  color: '#6B7280',
                   textDecoration: 'none',
                   transition: 'color 0.2s',
                 }}>
