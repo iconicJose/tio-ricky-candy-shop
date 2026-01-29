@@ -13,30 +13,60 @@ export default function HomePage() {
       {/* Dripping Chamoy Effect */}
       <div style={{ lineHeight: 0, marginTop: '-1px' }}>
         <svg
-          viewBox="0 0 1200 80"
+          viewBox="0 0 1200 110"
           preserveAspectRatio="none"
-          style={{ display: 'block', width: '100%', height: '60px' }}
+          style={{ display: 'block', width: '100%', height: '72px', overflow: 'visible' }}
         >
-          {/* Main chamoy bar at top */}
-          <rect x="0" y="0" width="1200" height="12" fill="var(--chamoy-red)" />
-          {/* Individual drips hanging down */}
-          <ellipse cx="35" cy="12" rx="18" ry="35" fill="var(--chamoy-red)" />
-          <ellipse cx="100" cy="12" rx="22" ry="55" fill="var(--chamoy-red)" />
-          <ellipse cx="165" cy="12" rx="16" ry="32" fill="var(--chamoy-red)" />
-          <ellipse cx="240" cy="12" rx="24" ry="60" fill="var(--chamoy-red)" />
-          <ellipse cx="308" cy="12" rx="14" ry="28" fill="var(--chamoy-red)" />
-          <ellipse cx="382" cy="12" rx="20" ry="48" fill="var(--chamoy-red)" />
-          <ellipse cx="447" cy="12" rx="15" ry="34" fill="var(--chamoy-red)" />
-          <ellipse cx="520" cy="12" rx="24" ry="62" fill="var(--chamoy-red)" />
-          <ellipse cx="588" cy="12" rx="14" ry="26" fill="var(--chamoy-red)" />
-          <ellipse cx="662" cy="12" rx="20" ry="46" fill="var(--chamoy-red)" />
-          <ellipse cx="728" cy="12" rx="15" ry="32" fill="var(--chamoy-red)" />
-          <ellipse cx="800" cy="12" rx="22" ry="56" fill="var(--chamoy-red)" />
-          <ellipse cx="868" cy="12" rx="14" ry="30" fill="var(--chamoy-red)" />
-          <ellipse cx="942" cy="12" rx="20" ry="50" fill="var(--chamoy-red)" />
-          <ellipse cx="1005" cy="12" rx="16" ry="38" fill="var(--chamoy-red)" />
-          <ellipse cx="1080" cy="12" rx="24" ry="58" fill="var(--chamoy-red)" />
-          <ellipse cx="1148" cy="12" rx="14" ry="28" fill="var(--chamoy-red)" />
+          {/* Single continuous drip silhouette (more "drippy" than separate ellipses) */}
+          <path
+            d="
+              M0 0
+              H1200
+              V18
+              C1180 18 1165 18 1155 26
+              C1140 36 1148 64 1128 72
+              C1105 82 1090 58 1085 42
+              C1080 30 1070 20 1050 22
+              C1025 24 1030 50 1015 60
+              C995 74 970 58 970 38
+              C970 24 960 18 940 18
+              C920 18 920 30 910 40
+              C900 52 906 78 880 84
+              C850 90 844 56 850 40
+              C856 26 842 18 820 18
+              C792 18 804 30 792 44
+              C780 60 786 96 752 98
+              C716 100 722 58 732 44
+              C742 30 730 18 708 18
+              C680 18 686 30 676 42
+              C664 56 668 86 642 88
+              C612 90 612 58 620 44
+              C630 26 616 18 592 18
+              C566 18 572 28 560 44
+              C546 64 552 96 520 96
+              C488 96 490 64 502 44
+              C512 26 494 18 470 18
+              C444 18 450 30 436 46
+              C420 64 428 92 396 92
+              C366 92 366 66 376 46
+              C388 24 370 18 350 18
+              C326 18 330 28 318 40
+              C304 54 306 80 284 80
+              C260 80 258 58 264 42
+              C272 26 262 18 240 18
+              C212 18 218 34 206 48
+              C192 66 194 92 160 92
+              C126 92 130 62 140 48
+              C152 30 140 18 118 18
+              C88 18 94 34 84 46
+              C72 62 76 86 48 86
+              C18 86 20 44 28 34
+              C36 22 26 18 0 18
+              Z
+            "
+            fill="var(--chamoy-red)"
+            style={{ filter: 'drop-shadow(0 0 14px rgba(255, 38, 90, 0.55))' }}
+          />
         </svg>
       </div>
 
