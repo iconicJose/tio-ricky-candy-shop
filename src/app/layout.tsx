@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import './globals.css';
 import { CartProvider } from '@/components/CartProvider';
+import { ThemeProvider } from '@/components/ThemeProvider';
 import { Header } from '@/components/Header';
 
 export const metadata: Metadata = {
@@ -15,8 +16,22 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function() {
+                const saved = localStorage.getItem('pik-a-mela-theme');
+                const theme = saved === 'light' ? 'light' : 'dark';
+                document.documentElement.setAttribute('data-theme', theme);
+              })();
+            `,
+          }}
+        />
+      </head>
       <body>
+        <ThemeProvider>
         <CartProvider>
           {/* Header */}
           <Header />
@@ -189,6 +204,7 @@ export default function RootLayout({
             </div>
           </footer>
         </CartProvider>
+        </ThemeProvider>
       </body>
     </html>
   );

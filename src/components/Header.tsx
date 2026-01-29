@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { CartButton } from './CartButton';
+import { ThemeToggle } from './ThemeToggle';
 
 export function Header() {
   return (
@@ -9,7 +10,7 @@ export function Header() {
       position: 'sticky',
       top: 0,
       zIndex: 100,
-      backgroundColor: 'var(--white)',
+      backgroundColor: 'var(--background)',
       borderBottom: '1px solid var(--border-color)',
     }}>
       <div className="container" style={{
@@ -53,8 +54,15 @@ export function Header() {
           </Link>
         </nav>
 
-        {/* Cart Button */}
-        <CartButton />
+        {/* Theme Toggle + Cart */}
+        <div style={{
+          display: 'flex',
+          alignItems: 'center',
+          gap: '0.75rem',
+        }}>
+          <ThemeToggle />
+          <CartButton />
+        </div>
       </div>
     </header>
   );

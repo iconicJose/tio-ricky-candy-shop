@@ -10,22 +10,33 @@ const categories = [
 export default function HomePage() {
   return (
     <>
-      {/* Red Ruffle under header */}
+      {/* Dripping Chamoy Effect */}
       <div style={{ backgroundColor: 'var(--chamoy-red)', lineHeight: 0, marginTop: '-1px' }}>
-        <svg viewBox="0 0 1200 30" preserveAspectRatio="none" style={{ display: 'block', width: '100%', height: '18px' }}>
-          <path d="M0,30 Q75,0 150,30 T300,30 T450,30 T600,30 T750,30 T900,30 T1050,30 T1200,30 L1200,0 L0,0 Z" fill="var(--white)" />
-        </svg>
-      </div>
-      <div style={{ backgroundColor: 'var(--chamoy-red)', height: '10px' }} />
-      <div style={{ backgroundColor: 'var(--white)', lineHeight: 0 }}>
-        <svg viewBox="0 0 1200 30" preserveAspectRatio="none" style={{ display: 'block', width: '100%', height: '18px' }}>
-          <path d="M0,30 Q75,0 150,30 T300,30 T450,30 T600,30 T750,30 T900,30 T1050,30 T1200,30 L1200,0 L0,0 Z" fill="var(--chamoy-red)" />
+        <svg
+          viewBox="0 0 1200 60"
+          preserveAspectRatio="none"
+          style={{ display: 'block', width: '100%', height: '50px' }}
+        >
+          <path
+            d="M0,0 L1200,0 L1200,15
+               Q1170,15 1160,32 Q1155,45 1135,45 Q1115,45 1110,32 Q1100,15 1070,15
+               Q1040,15 1030,25 Q1025,35 1010,35 Q995,35 990,25 Q980,15 950,15
+               Q920,15 910,30 Q905,42 885,42 Q865,42 860,30 Q850,15 820,15
+               Q790,15 780,20 Q775,26 760,26 Q745,26 740,20 Q730,15 700,15
+               Q670,15 660,35 Q655,50 635,50 Q615,50 610,35 Q600,15 570,15
+               Q540,15 530,22 Q525,30 510,30 Q495,30 490,22 Q480,15 450,15
+               Q420,15 410,38 Q405,52 385,52 Q365,52 360,38 Q350,15 320,15
+               Q290,15 280,20 Q275,26 260,26 Q245,26 240,20 Q230,15 200,15
+               Q170,15 160,32 Q155,45 135,45 Q115,45 110,32 Q100,15 70,15
+               Q40,15 35,25 Q30,35 15,35 Q5,35 0,25 L0,15 L0,0 Z"
+            fill="var(--background)"
+          />
         </svg>
       </div>
 
       {/* ===== HERO SECTION ===== */}
       <section style={{
-        backgroundColor: 'var(--white)',
+        backgroundColor: 'var(--background)',
         paddingTop: 'clamp(2rem, 8vw, 5rem)',
         paddingBottom: 'clamp(4rem, 12vw, 8rem)',
         position: 'relative',
@@ -156,7 +167,7 @@ export default function HomePage() {
                 style={{
                   display: 'block',
                   padding: '2rem',
-                  backgroundColor: 'var(--white)',
+                  backgroundColor: 'var(--background)',
                   borderRadius: '12px',
                   textDecoration: 'none',
                   border: '1px solid var(--border-color)',
@@ -188,7 +199,7 @@ export default function HomePage() {
 
       {/* ===== SIMPLE TRUST BANNER ===== */}
       <section style={{
-        backgroundColor: 'var(--white)',
+        backgroundColor: 'var(--background)',
         padding: '3rem 0',
         borderTop: '1px solid var(--border-color)',
         borderBottom: '1px solid var(--border-color)',
