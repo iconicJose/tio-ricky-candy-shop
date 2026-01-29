@@ -43,10 +43,11 @@ export default function RootLayout({
 
           {/* Footer */}
           <footer style={{
-            backgroundColor: 'var(--background-subtle)',
+            backgroundColor: 'var(--background)',
             color: 'var(--text-primary)',
             padding: '4rem 0 2rem',
             marginTop: '4rem',
+            borderTop: '1px solid var(--border-color)',
           }}>
             <div className="container">
               <div style={{
