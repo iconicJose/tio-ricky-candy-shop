@@ -1,8 +1,8 @@
 {
-  "name": "tio-ricky-candy-shop",
+  "name": "Candy",
   "version": "0.1.0",
   "private": true,
-  "description": "Pik-A-Mela Chamoy Candy Shop - Security-first e-commerce platform",
+  "description": "",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
